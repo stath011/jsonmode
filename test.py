@@ -1,15 +1,18 @@
 import os
+import json
 from openai import OpenAI
 from dotenv import load_dotenv
 
+# Load environment variables
 load_dotenv()
 
+# Initialize OpenAI client
 client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY")
-
 )
 
-pdf = """
+# Example PDF text (normally, you would extract this from an actual PDF)
+pdf_text = """
 Product data sheet
 Specifications
 Wear part, fan for soft starter,
@@ -49,10 +52,19 @@ Disclaimer: This documentation is not intended as a substitute for and is not to
 Jan 18, 2023 1
 """
 
+# Call OpenAI API
 response = client.chat.completions.create(
     model="gpt-4o-2024-08-06",
-    messages=[{"role": "system", "content": "You are a helpful data entry assistant. Extract the relevant values out of provided pdf documents and output in json."},
-              {"role": "user", "content": pdf}],
+    messages=[
+        {
+            "role": "system",
+            "content": "You are a helpful data entry assistant. Extract the relevant values out of provided pdf documents and output in JSON format. Do not include newline characters and ensure the output is a single-line JSON string with clear key-value pairs."
+        },
+        {
+            "role": "user",
+            "content": pdf_text
+        }
+    ],
     response_format={
         "type": "json_schema",
         "json_schema": {
@@ -71,14 +83,13 @@ response = client.chat.completions.create(
                                 "content": {
                                     "type": "object",
                                     "properties": {
-                                        "name": {
-                                            "type": "string"
-                                        },
-                                        "value": {
-                                            "type": "string"
+                                        "fields": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string"
+                                            }
                                         }
                                     },
-                                    "required": ["name", "value"],
                                     "additionalProperties": False
                                 }
                             },
@@ -93,7 +104,14 @@ response = client.chat.completions.create(
             "strict": True
         }
     }
-
 )
 
-print(response.choices[0].message.content)
+# Clean up the response to remove newlines and format it correctly
+response_text = response.choices[0].message.content
+cleaned_response = response_text.replace('\n', '').strip()
+
+# Load the cleaned response as JSON
+response_json = json.loads(cleaned_response)
+
+# Print the formatted JSON output
+print(json.dumps(response_json, indent=2))
