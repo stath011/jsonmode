@@ -25,7 +25,7 @@
         }
     },
     "required": [
-        "exampleproperty1"
+        "documents"
     ],
     "additionalProperties": False
 }
