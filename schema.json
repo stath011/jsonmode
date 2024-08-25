@@ -1,0 +1,32 @@
+{
+    "type": "object",
+    "properties": {
+        "steps": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "explanation": {
+                        "type": "string"
+                    },
+                    "output": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "explanation",
+                    "output"
+                ],
+                "additionalProperties": False
+            }
+        },
+        "final_answer": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "steps",
+        "final_answer"
+    ],
+    "additionalProperties": False
+}

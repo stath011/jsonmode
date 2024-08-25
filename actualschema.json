@@ -1,0 +1,31 @@
+{
+    "type": "object",
+    "properties": {
+        "documents": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "documentTitle": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "required": [
+        "exampleproperty1"
+    ],
+    "additionalProperties": False
+}
